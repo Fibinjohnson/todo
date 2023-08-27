@@ -10,6 +10,10 @@ const {connectToDb} =require('./connection/connection')
 const app =express();
 const http=require('http');
 const server=http.createServer(app)
+const {register}=require('./controller/Auth')
+const {verifyToken}=require('./Middleware/auth')
+const auth=require('./routes/auth')
+const postRoutes=require('./routes/postRoutes')
 
 app.use(cors({  origin: 'http://localhost:3000',
      credentials:true}))
@@ -23,7 +27,9 @@ app.use(helmet.crossOriginResourcePolicy({
 app.use(BodyParser.urlencoded({limit:"30mb", extended: true }));
 
 
-
+app.post('/auth/register',register)
+app.use('/auth',auth)
+app.use('/post',postRoutes)
 
 connectToDb().then(()=>{console.log("connection successfull")
     server.listen(3001||process.env.PORT,async()=>{
@@ -31,5 +37,5 @@ connectToDb().then(()=>{console.log("connection successfull")
       console.log("app is listening at port 3001")})
     
    }).catch((error)=>{
-    console.log(error,":error")
+    console.log('connection ERROR',error)
    })
