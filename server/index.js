@@ -11,11 +11,10 @@ const app =express();
 const http=require('http');
 const server=http.createServer(app)
 const {register}=require('./controller/Auth')
-const {verifyToken}=require('./Middleware/auth')
 const auth=require('./routes/auth')
 const postRoutes=require('./routes/postRoutes')
 
-app.use(cors({  origin: 'http://localhost:3000',
+app.use(cors({  origin: 'https://main--profound-sopapillas-939c26.netlify.app',
      credentials:true}))
 app.use(cookieParser())
 app.use(express.json());
