@@ -53,7 +53,8 @@ function TaskItem({completed,postId,title,content}) {
   };
 
   
-  const checkStatus=async()=>{
+  const checkStatus=async(e)=>{
+   
     const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/checked`,{
       method:"PATCH",
       headers:{"Authorization":`Bearer ${token}`,
@@ -65,7 +66,8 @@ function TaskItem({completed,postId,title,content}) {
    
     dispatch(setPosts({posts:updatedPost}));
   }
-  const handleDelete=async()=>{
+  const handleDelete=async(e)=>{
+    
     setDeleteClicked(!deleteClicked)
     const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/deletePost`,{
         method:'DELETE',

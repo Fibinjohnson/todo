@@ -26,7 +26,8 @@ function CreateArea() {
     function expanded(){
         setExpand(true)
     }
-    const handlePostClick = async () => {
+    const handlePostClick = async (e) => {
+      e.preventDefault()
       try {
         setIsFetching(true); // Assuming you want to set fetching to true when the request is sent
         const { user } = text;
