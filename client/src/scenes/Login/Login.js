@@ -21,7 +21,8 @@ function Login() {
   const [registerName,setRegisterName]=useState('')
   const [registerEmail,setRegisterEmail]=useState('')
   const [registerPassword,setPassword]=useState('')
-  const [invalidPassword,setInvalidPassword]=useState()
+  const [invalidPassword,setInvalidPassword]=useState();
+  const [registeredmsg,setRegisteredmsg]=useState(null)
   const navigate=useNavigate();
   const [justifyActive, setJustifyActive] = useState('tab1');;
   const dispatch =useDispatch();
@@ -63,13 +64,14 @@ function Login() {
        const savedUserResponse = await fetch("https://task-manager-hcw2.onrender.com/auth/register", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Specify that you're sending JSON data
+          "Content-Type": "application/json", 
         },
         body: JSON.stringify({name:registerName,
           email:registerEmail,
           password:registerPassword}),
       });
        const savedUser=await savedUserResponse.json();
+       setRegisteredmsg('Account created')
        setRegisterEmail('');
        setRegisterName('');
        setPassword('')
@@ -122,6 +124,7 @@ function Login() {
           
 
           <MDBBtn type='submit'  className="mb-4 w-100">Sign up</MDBBtn>
+          {registeredmsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
         </form>
 
         </MDBTabsPane>
