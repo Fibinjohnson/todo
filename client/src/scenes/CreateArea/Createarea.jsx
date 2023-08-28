@@ -31,7 +31,7 @@ function CreateArea() {
         setIsFetching(true); // Assuming you want to set fetching to true when the request is sent
         const { user } = text;
     
-        const addPost = await fetch(`http://localhost:3001/post`, {
+        const addPost = await fetch(`https://task-manager-hcw2.onrender.com/post`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ function CreateArea() {
     const getMyPosts=async ()=>{
       
        try{
-        const postResponse=await fetch(`http://localhost:3001/post/${user._id}`,{
+        const postResponse=await fetch(`https://task-manager-hcw2.onrender.com/post/${user._id}`,{
             method:"GET",
             headers:{Authorization:`Bearer ${token}`}
         });

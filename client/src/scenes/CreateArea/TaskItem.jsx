@@ -54,7 +54,7 @@ function TaskItem({completed,postId,title,content}) {
 
   
   const checkStatus=async()=>{
-    const response=await fetch(`http://localhost:3001/post/${postId}/checked`,{
+    const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/checked`,{
       method:"PATCH",
       headers:{"Authorization":`Bearer ${token}`,
       "Content-Type":"application/json"},
@@ -67,7 +67,7 @@ function TaskItem({completed,postId,title,content}) {
   }
   const handleDelete=async()=>{
     setDeleteClicked(!deleteClicked)
-    const response=await fetch(`http://localhost:3001/post/${postId}/deletePost`,{
+    const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/deletePost`,{
         method:'DELETE',
         headers:{"Authorization":`Bearer ${token}`,
         "Content-Type":"application/json"},
@@ -80,7 +80,7 @@ function TaskItem({completed,postId,title,content}) {
   const getMyPosts=async ()=>{
       
     try{
-     const postResponse=await fetch(`http://localhost:3001/post/${userId}`,{
+     const postResponse=await fetch(`https://task-manager-hcw2.onrender.com/post/${userId}`,{
          method:"GET",
          headers:{Authorization:`Bearer ${token}`}
      });
@@ -99,7 +99,7 @@ const handleEditIconClick=async()=>{
 const handleSaveIconClick=async()=>{
     setIsEditMode(false);
     setDeleteClicked(!deleteClicked);
-    const response=await fetch(`http://localhost:3001/post/${postId}/editpost`,{
+    const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/editpost`,{
         method:'PATCH',
         headers:{"Authorization":`Bearer ${token}`,
         "Content-Type":"application/json"},

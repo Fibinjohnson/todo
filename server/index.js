@@ -32,6 +32,7 @@ app.use('/auth',auth)
 app.use('/post',postRoutes)
 
 connectToDb().then(()=>{console.log("connection successfull")
+
     server.listen(3001||process.env.PORT,async()=>{
      
       console.log("app is listening at port 3001")})
