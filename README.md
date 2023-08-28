@@ -5,7 +5,7 @@ This is a task management application built using the MERN stack (MongoDB, Expre
 ## Installation
 
 1. Clone this repository to your local machine:
-2.  git clone
+2.  git clone https://github.com/Fibinjohnson/TaskManagement.git
 
 navigate to backend directory
 ## SERVER configuration
