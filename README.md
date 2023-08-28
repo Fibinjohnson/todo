@@ -3,11 +3,12 @@
 This is a task management application built using the MERN stack (MongoDB, Express, React, Node.js) with Redux for state management. The application allows users to create, update, delete, and mark tasks as completed.
 
 ## Installation
+
 1. Clone this repository to your local machine:
 2.  git clone
 
 navigate to backend directory
-
+## SERVER configuration
 cd server
 npm install
 
@@ -20,7 +21,7 @@ JWT_SECRET=your-secret-key
 npm start
 
 
-## server configuration
+## CLIENT configuration
 cd client
 npm start
 
