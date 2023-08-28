@@ -62,7 +62,7 @@ function TaskItem({completed,postId,title,content}) {
      
     })
     const updatedPost=await response.json();
-    console.log(updatedPost,'updatedpost')
+   
     dispatch(setPosts({posts:updatedPost}));
   }
   const handleDelete=async()=>{

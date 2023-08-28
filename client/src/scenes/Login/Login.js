@@ -43,7 +43,6 @@ function Login() {
           password:loginPassword}),
       });
        const loggedInUser=await loginUserData.json();
-       console.log(loggedInUser,'loggedinUser')
        if(loggedInUser.msg){
           setInvalidPassword(loggedInUser.msg)
        }else{

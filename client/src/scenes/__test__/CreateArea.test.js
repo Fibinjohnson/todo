@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createRoot } from 'react-dom'; 
+import  {createRoot}  from 'react-dom'; 
 import CreateArea from '../CreateArea/Createarea';
 import TaskItem from '../CreateArea/TaskItem';
 import Home from '../Home';

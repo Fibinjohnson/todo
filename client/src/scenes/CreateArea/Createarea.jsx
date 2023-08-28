@@ -22,7 +22,7 @@ function CreateArea() {
         user:user._id,
         completed:false
     });
-    console.log(text,'text')
+ 
     function expanded(){
         setExpand(true)
     }
