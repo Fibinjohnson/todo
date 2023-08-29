@@ -34,7 +34,7 @@ function Login() {
   };
   const handleLogin=async(e)=>{
     e.preventDefault();
-    const loginUserData = await fetch("https://task-manager-hcw2.onrender.com/auth/login", {
+    const loginUserData = await fetch("http://localhost:3001/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 
@@ -61,7 +61,7 @@ function Login() {
   }
   const handleRegister=async(e)=>{
     e.preventDefault();
-       const savedUserResponse = await fetch("https://task-manager-hcw2.onrender.com/auth/register", {
+       const savedUserResponse = await fetch("http://localhost:3001/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 

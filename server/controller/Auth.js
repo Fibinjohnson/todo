@@ -1,6 +1,5 @@
 const express=require("express");
 const {connectToDb}=require("../connection/connection");
-const { ObjectId } = require("mongodb");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 module.exports.register=async(req,res)=>{
@@ -22,11 +21,9 @@ module.exports.register=async(req,res)=>{
     }catch(error){
         res.status(500).json({error:err})
     }
-
 }
 module.exports.login=async(req,res)=>{
     try{
-        console.log(req.body,"req,body")
         const {
             email,password
         }=req.body;
@@ -34,9 +31,7 @@ module.exports.login=async(req,res)=>{
         const user= await database.collection("users").findOne({email:email});
        
         if(!user){
-            console.log("email not found")
            return  res.status(400).json({msg:"Email not found"})
-          
         };
         const isMatch= await bcrypt.compare(password,user.password);
         console.log(isMatch,"password match")

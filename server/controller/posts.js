@@ -1,31 +1,37 @@
-const bcrypt=require("bcrypt");
-const jwt=require("jsonwebtoken");
 const {connectToDb}=require("../connection/connection");
 const { ObjectId } = require("mongodb");
 
 
 module.exports.addPost=async(req,res)=>{
-    console.log(req.body,'req body');
-    const {title,content,user,completed}=req.body
+  try{
+    const {title,content,completed}=req.body
+    const {userId}=req.params
+    console.log(req.params)
     const database =await connectToDb();
     const addedPost=await database.collection('posts').insertOne({
          title,
          content,
-         user:new ObjectId(user),
+         user:new ObjectId(userId),
          completed
     })
+    res.status(200).json(addedPost);
+  }catch(error){
+    console.error('Error occured on adding:', error);
+    res.status(500).json({ message: 'Error occured on adding' });
+  }
+   
 }
 module.exports.deletePost=async(req,res)=>{
   try{
      const db= await connectToDb();
-     const {postId}=req.params;
-     const {userId}=req.body;
+     const {postId,userId}=req.params;
+    
      const updatedPosts=await db.collection('posts').deleteOne({_id:new ObjectId(postId)});
      if (updatedPosts.modifiedCount > 0) {
         const updatedPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray();
-        console.log(updatedPosts,'updatedPost')
-        res.status(200).json(updatedPosts);
+         res.status(200).json(updatedPosts);
      } 
+     res.status(200)
   }catch(error){
     console.error('Error occured on deleting:', error);
     res.status(500).json({ message: 'Error occured on deleting' });
@@ -50,6 +56,7 @@ module.exports.editPost=async(req,res)=>{
         const editedPosts=await db.collection('posts').find({user:new ObjectId(userId)}).toArray();
         res.status(200).json(editedPosts);
       } 
+      res.status(200)
    }catch(error){
    console.error('Error occured on editing:', error);
    res.status(500).json({ message: 'Error occured on editing' });
@@ -71,23 +78,21 @@ module.exports.changeStatus=async(req,res)=>{
     try{
       const {postId}=req.params;
       const {userId}=req.body;
-      console.log(req.body,'req body')
       const db = await connectToDb();
-    const post = await db.collection('posts').findOne({ _id: new ObjectId(postId) });
+      const post = await db.collection('posts').findOne({ _id: new ObjectId(postId) });
     if (post) {
-        const updatedValue = !post.completed; // Toggle the boolean value
+        const updatedValue = !post.completed; 
         const updatedPost = await db.collection('posts').updateOne(
           { _id: new ObjectId(postId) },
           { $set: { completed: updatedValue } }
         );
         if (updatedPost.modifiedCount > 0) {
              const updatedPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray();
-             console.log(updatedPosts,'updatedPost')
              res.status(200).json(updatedPosts);
           } 
+        }else{
+          res.status(200).json(post)
         }
-
-      
       
     }catch(err){
         console.error('Error status feed posts:', err);

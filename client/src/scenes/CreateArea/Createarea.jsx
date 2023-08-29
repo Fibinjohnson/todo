@@ -10,7 +10,7 @@ import { setPosts } from "../../state";
 import { useEffect } from "react";
 
 function CreateArea() {
-   const [isFetching, setIsFetching] = useState(false);
+   const [postUpdated, setPostupdated] = useState(false);
     const user=useSelector((state)=>state.user)
     const dispatch=useDispatch()
     const token=useSelector((state)=>state.token)
@@ -19,7 +19,6 @@ function CreateArea() {
     const [text,setText]=useState({
         title:"",
         content:"",
-        user:user._id,
         completed:false
     });
  
@@ -28,11 +27,9 @@ function CreateArea() {
     }
     const handlePostClick = async (e) => {
       e.preventDefault()
+      setPostupdated(!postUpdated); 
       try {
-        setIsFetching(true); // Assuming you want to set fetching to true when the request is sent
-        const { user } = text;
-    
-        const addPost = await fetch(`https://task-manager-hcw2.onrender.com/post`, {
+        const addPost = await fetch(`http://localhost:3001/post/${user._id}`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +42,7 @@ function CreateArea() {
           setText({
             title: '',
             content: '',
-            user: user._id,
+            completed:false 
           });
         } else {
           console.error('Failed to add post');
@@ -59,7 +56,7 @@ function CreateArea() {
     const getMyPosts=async ()=>{
       
        try{
-        const postResponse=await fetch(`https://task-manager-hcw2.onrender.com/post/${user._id}`,{
+        const postResponse=await fetch(`http://localhost:3001/post/${user._id}`,{
             method:"GET",
             headers:{Authorization:`Bearer ${token}`}
         });
@@ -72,12 +69,13 @@ function CreateArea() {
     
     const handleTextChange = (event) => {
       const { name, value } = event.target;
-
       setText((prevText) => ({ ...prevText, [name]: value }));
     };
+
     useEffect(() => {
         getMyPosts();
-    }, [isFetching]);
+    }, [postUpdated]);
+
   return (
     <div data-testid='createarea'> 
       <form className="createAreaForm" onSubmit={handlePostClick}>

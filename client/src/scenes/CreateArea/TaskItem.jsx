@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState ,useEffect} from 'react';
 import { useSelector ,useDispatch} from 'react-redux';
-import { setPosts } from "../../state";
+import { setPosts,setPost } from "../../state";
 import CheckIcon from '@mui/icons-material/Check';
 
 function TaskItem({completed,postId,title,content}) {
@@ -15,6 +15,7 @@ function TaskItem({completed,postId,title,content}) {
     const dispatch=useDispatch();
     const [isEditMode, setIsEditMode] = useState(false);
     const [deleteClicked,setDeleteClicked]=useState(false)
+    const [isChecked,setChecked]=useState(true);
     const [heading,setTitle]=useState(title);
     const [descreption,setContent]=useState(content);
     const taskItemStyles = {
@@ -53,36 +54,58 @@ function TaskItem({completed,postId,title,content}) {
   };
 
   
-  const checkStatus=async(e)=>{
-   
-    const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/checked`,{
-      method:"PATCH",
-      headers:{"Authorization":`Bearer ${token}`,
-      "Content-Type":"application/json"},
-      body:JSON.stringify({userId:userId})
-     
-    })
-    const updatedPost=await response.json();
-   
-    dispatch(setPosts({posts:updatedPost}));
+  const checkStatus = async (e) => {
+    e.preventDefault();
+
+    try {
+        const response = await fetch(`http://localhost:3001/post/${postId}/checked`, {
+            method: "PATCH",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId: userId })
+        });
+
+        if (!response.ok) {
+            throw new Error('Request failed');
+        }
+
+        const updatedPost = await response.json();
+        dispatch(setPosts({ posts: updatedPost }));
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
+}
+
+const handleDelete = async (e) => {
+  e.preventDefault();
+  setDeleteClicked(!deleteClicked);
+
+  try {
+      const response = await fetch(`http://localhost:3001/post/${postId}/deletePost/${userId}`, {
+          method: 'DELETE',
+          headers: {
+              "Authorization": `Bearer ${token}`
+          }
+      });
+
+      if (!response.ok) {
+          throw new Error('Request failed');
+      }
+
+      const deletedPost = await response.json();
+      dispatch(setPosts({ posts: deletedPost }));
+  } catch (error) {
+      console.error('An error occurred:', error);
   }
-  const handleDelete=async(e)=>{
-    
-    setDeleteClicked(!deleteClicked)
-    const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/deletePost`,{
-        method:'DELETE',
-        headers:{"Authorization":`Bearer ${token}`,
-        "Content-Type":"application/json"},
-        body:JSON.stringify({userId:userId})
-    })
-    const deletedPost=await response.json();
-    dispatch(setPosts({posts:deletedPost}));
-  }
+};
+
 
   const getMyPosts=async ()=>{
       
     try{
-     const postResponse=await fetch(`https://task-manager-hcw2.onrender.com/post/${userId}`,{
+     const postResponse=await fetch(`http://localhost:3001/post/${userId}`,{
          method:"GET",
          headers:{Authorization:`Bearer ${token}`}
      });
@@ -93,24 +116,38 @@ function TaskItem({completed,postId,title,content}) {
  }
 }
  
-useEffect(()=>getMyPosts,[deleteClicked])
+
 
 const handleEditIconClick=async()=>{
     setIsEditMode(true);
 }
-const handleSaveIconClick=async()=>{
-    setIsEditMode(false);
-    setDeleteClicked(!deleteClicked);
-    const response=await fetch(`https://task-manager-hcw2.onrender.com/post/${postId}/editpost`,{
-        method:'PATCH',
-        headers:{"Authorization":`Bearer ${token}`,
-        "Content-Type":"application/json"},
-        body:JSON.stringify({userId:userId,title:heading,content:descreption,completed:false})
-    })
-    const editedpost=await response.json();
-    dispatch(setPosts({posts:editedpost}));
-}
 
+const handleSaveIconClick = async () => {
+  try {
+      setIsEditMode(false);
+      setChecked(!isChecked)
+
+      const response = await fetch(`http://localhost:3001/post/${postId}/editpost`, {
+          method: 'PATCH',
+          headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ userId: userId, title: heading, content: descreption, completed: false })
+      });
+
+      if (!response.ok) {
+          throw new Error('Request failed');
+      }
+
+      const editedPost = await response.json();
+      dispatch(setPosts({ posts: editedPost }));
+  } catch (error) {
+      console.error('An error occurred:', error);
+  }
+};
+
+useEffect(()=>getMyPosts,[deleteClicked,isChecked])
   return (
     <div style={completed ?taskcheckedItemStyles:taskItemStyles}>
       <FormControlLabel
