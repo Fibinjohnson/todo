@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState ,useEffect} from 'react';
 import { useSelector ,useDispatch} from 'react-redux';
-import { setPosts,setPost } from "../../state";
+import { setPosts,setPost ,setDelete} from "../../state";
 import CheckIcon from '@mui/icons-material/Check';
 
 function TaskItem({completed,postId,title,content}) {
@@ -56,15 +56,14 @@ function TaskItem({completed,postId,title,content}) {
   
   const checkStatus = async (e) => {
     e.preventDefault();
-
+    
     try {
         const response = await fetch(`http://localhost:3001/post/${postId}/checked`, {
             method: "PATCH",
             headers: {
                 "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userId: userId })
+            
         });
 
         if (!response.ok) {
@@ -72,19 +71,21 @@ function TaskItem({completed,postId,title,content}) {
         }
 
         const updatedPost = await response.json();
-        dispatch(setPosts({ posts: updatedPost }));
+        dispatch(setPost({ post: updatedPost }));
+        
     } catch (error) {
         console.error('An error occurred:', error);
     }
 }
-
+console.log(useSelector((state)=>state.posts),'handle delete')
 const handleDelete = async (e) => {
-  e.preventDefault();
+
   setDeleteClicked(!deleteClicked);
+ 
 
   try {
-      const response = await fetch(`http://localhost:3001/post/${postId}/deletePost/${userId}`, {
-          method: 'DELETE',
+      const response = await fetch(`http://localhost:3001/post/${postId}/deletePost`, {
+          method: 'PATCH',
           headers: {
               "Authorization": `Bearer ${token}`
           }
@@ -95,7 +96,8 @@ const handleDelete = async (e) => {
       }
 
       const deletedPost = await response.json();
-      dispatch(setPosts({ posts: deletedPost }));
+      dispatch(setDelete({ post: deletedPost }));
+      
   } catch (error) {
       console.error('An error occurred:', error);
   }
@@ -111,6 +113,7 @@ const handleDelete = async (e) => {
      });
      const data=await postResponse.json()
         dispatch(setPosts({posts:data}))
+       
  }catch(err){
      console.log("get feedPosts error",err)
  }
@@ -133,7 +136,7 @@ const handleSaveIconClick = async () => {
               "Authorization": `Bearer ${token}`,
               "Content-Type": "application/json"
           },
-          body: JSON.stringify({ userId: userId, title: heading, content: descreption, completed: false })
+          body: JSON.stringify({  title: heading, content: descreption, completed: false })
       });
 
       if (!response.ok) {
@@ -141,13 +144,13 @@ const handleSaveIconClick = async () => {
       }
 
       const editedPost = await response.json();
-      dispatch(setPosts({ posts: editedPost }));
+      dispatch(setPost({ post: editedPost }));
   } catch (error) {
       console.error('An error occurred:', error);
   }
 };
 
-useEffect(()=>getMyPosts,[deleteClicked,isChecked])
+useEffect(()=>{getMyPosts()},[deleteClicked])
   return (
     <div style={completed ?taskcheckedItemStyles:taskItemStyles}>
       <FormControlLabel
@@ -195,4 +198,4 @@ useEffect(()=>getMyPosts,[deleteClicked,isChecked])
 }
 
 export default TaskItem;
-//  onChange={onCheckboxChange} 
+

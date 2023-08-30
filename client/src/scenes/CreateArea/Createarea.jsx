@@ -21,6 +21,7 @@ function CreateArea() {
         content:"",
         completed:false
     });
+    console.log(feedPosts)
  
     function expanded(){
         setExpand(true)
@@ -28,6 +29,7 @@ function CreateArea() {
     const handlePostClick = async (e) => {
       e.preventDefault()
       setPostupdated(!postUpdated); 
+    
       try {
         const addPost = await fetch(`http://localhost:3001/post/${user._id}`, {
           method: "POST",
@@ -53,8 +55,7 @@ function CreateArea() {
       }
     };
     
-    const getMyPosts=async ()=>{
-      
+    const getMyPosts=async ()=>{ 
        try{
         const postResponse=await fetch(`http://localhost:3001/post/${user._id}`,{
             method:"GET",

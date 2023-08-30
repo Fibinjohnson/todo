@@ -24,14 +24,13 @@ module.exports.addPost=async(req,res)=>{
 module.exports.deletePost=async(req,res)=>{
   try{
      const db= await connectToDb();
-     const {postId,userId}=req.params;
+     const {postId}=req.params;
     
      const updatedPosts=await db.collection('posts').deleteOne({_id:new ObjectId(postId)});
-     if (updatedPosts.modifiedCount > 0) {
-        const updatedPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray();
+     
+        const updatedPost= await db.collection('posts').findOne({_id:new ObjectId(postId)}).toArray();
          res.status(200).json(updatedPosts);
-     } 
-     res.status(200)
+     
   }catch(error){
     console.error('Error occured on deleting:', error);
     res.status(500).json({ message: 'Error occured on deleting' });
@@ -41,7 +40,7 @@ module.exports.editPost=async(req,res)=>{
    try{
      const db=await connectToDb();
      const {postId}=req.params;
-     const {title,userId,content,completed}=req.body
+     const {title,content,completed}=req.body
      const updatedPosts = await db.collection('posts').updateOne(
         { _id: new ObjectId(postId) },
         {
@@ -52,11 +51,9 @@ module.exports.editPost=async(req,res)=>{
           }
         }
       );
-      if (updatedPosts.modifiedCount > 0) {
-        const editedPosts=await db.collection('posts').find({user:new ObjectId(userId)}).toArray();
-        res.status(200).json(editedPosts);
-      } 
-      res.status(200)
+        const editedPost=await db.collection('posts').findOne({_id:new ObjectId(postId)});
+        res.status(200).json(editedPost);
+      
    }catch(error){
    console.error('Error occured on editing:', error);
    res.status(500).json({ message: 'Error occured on editing' });
@@ -77,22 +74,18 @@ module.exports.getFeedpost = async (req, res) => {
 module.exports.changeStatus=async(req,res)=>{
     try{
       const {postId}=req.params;
-      const {userId}=req.body;
       const db = await connectToDb();
       const post = await db.collection('posts').findOne({ _id: new ObjectId(postId) });
     if (post) {
         const updatedValue = !post.completed; 
-        const updatedPost = await db.collection('posts').updateOne(
+         await db.collection('posts').updateOne(
           { _id: new ObjectId(postId) },
           { $set: { completed: updatedValue } }
         );
-        if (updatedPost.modifiedCount > 0) {
-             const updatedPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray();
-             res.status(200).json(updatedPosts);
+             const updatedPost= await db.collection('posts').findOne({_id:new ObjectId(postId)});
+             res.status(200).json(updatedPost);
           } 
-        }else{
-          res.status(200).json(post)
-        }
+      
       
     }catch(err){
         console.error('Error status feed posts:', err);

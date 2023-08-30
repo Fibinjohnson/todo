@@ -28,8 +28,14 @@ export const authSlice=createSlice({
                }
            })
            state.posts=updatedPost;
+       },
+       setDelete:(state,action)=>{
+        const updatedPosts=state.posts.filter((post)=>{
+                return post._id !== action.payload.post._id
+        })
+         state.posts=updatedPosts
        }
     }
 })
-export const {setLogin,setLogout,setPost,setPosts}=authSlice.actions;
+export const {setLogin,setLogout,setPost,setPosts,setDelete}=authSlice.actions;
 export default authSlice;
