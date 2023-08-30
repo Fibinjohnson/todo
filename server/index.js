@@ -26,9 +26,9 @@ app.use(helmet.crossOriginResourcePolicy({
 app.use(BodyParser.urlencoded({limit:"30mb", extended: true }));
 
 
-app.post('/auth/register',register)
-app.use('/auth',auth)
-app.use('/post',postRoutes)
+app.post('/api/auth/register',register)
+app.use('/api/auth',auth)
+app.use('/api/post',postRoutes)
 
 connectToDb().then(()=>{console.log("connection successfull")
 

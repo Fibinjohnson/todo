@@ -8,7 +8,7 @@ import { useState ,useEffect} from 'react';
 import { useSelector ,useDispatch} from 'react-redux';
 import { setPosts,setPost ,setDelete} from "../../state";
 import CheckIcon from '@mui/icons-material/Check';
-
+import config from '../../config';
 function TaskItem({completed,postId,title,content}) {
     const userId=useSelector((state)=>state.user._id)
     const token=useSelector((state)=>state.token)
@@ -58,7 +58,7 @@ function TaskItem({completed,postId,title,content}) {
     e.preventDefault();
     
     try {
-        const response = await fetch(`http://localhost:3001/post/${postId}/checked`, {
+        const response = await fetch(`${config.apiUrl}/post/${postId}/checked`, {
             method: "PATCH",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -84,7 +84,7 @@ const handleDelete = async (e) => {
  
 
   try {
-      const response = await fetch(`http://localhost:3001/post/${postId}/deletePost`, {
+      const response = await fetch(`${config.apiUrl}/post/${postId}/deletePost`, {
           method: 'DELETE',
           headers: {
               "Authorization": `Bearer ${token}`
@@ -107,7 +107,7 @@ const handleDelete = async (e) => {
   const getMyPosts=async ()=>{
       
     try{
-     const postResponse=await fetch(`http://localhost:3001/post/${userId}`,{
+     const postResponse=await fetch(`${config.apiUrl}/post/${userId}`,{
          method:"GET",
          headers:{Authorization:`Bearer ${token}`}
      });
@@ -130,7 +130,7 @@ const handleSaveIconClick = async () => {
       setIsEditMode(false);
       setChecked(!isChecked)
 
-      const response = await fetch(`http://localhost:3001/post/${postId}/editpost`, {
+      const response = await fetch(`${config.apiUrl}/post/${postId}/editpost`, {
           method: 'PATCH',
           headers: {
               "Authorization": `Bearer ${token}`,

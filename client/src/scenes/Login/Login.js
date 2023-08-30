@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { setLogin } from '../../state';
 import { useDispatch } from 'react-redux';
+import config from '../../config';
 import {
   MDBContainer,
   MDBTabs,
@@ -34,7 +35,7 @@ function Login() {
   };
   const handleLogin=async(e)=>{
     e.preventDefault();
-    const loginUserData = await fetch("http://localhost:3001/auth/login", {
+    const loginUserData = await fetch(`${config.apiUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 

@@ -8,6 +8,7 @@ import TaskItem from "./TaskItem";
 import { useDispatch } from "react-redux";
 import { setPosts } from "../../state";
 import { useEffect } from "react";
+import config from "../../config";
 
 function CreateArea() {
    const [postUpdated, setPostupdated] = useState(false);
@@ -31,7 +32,7 @@ function CreateArea() {
       setPostupdated(!postUpdated); 
     
       try {
-        const addPost = await fetch(`http://localhost:3001/post/${user._id}`, {
+        const addPost = await fetch(`${config.apiUrl}/post/${user._id}`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +58,7 @@ function CreateArea() {
     
     const getMyPosts=async ()=>{ 
        try{
-        const postResponse=await fetch(`http://localhost:3001/post/${user._id}`,{
+        const postResponse=await fetch(`${config.apiUrl}/post/${user._id}`,{
             method:"GET",
             headers:{Authorization:`Bearer ${token}`}
         });

@@ -26,10 +26,10 @@ module.exports.deletePost=async(req,res)=>{
      const db= await connectToDb();
      const {postId}=req.params;
     
-     const updatedPosts=await db.collection('posts').deleteOne({_id:new ObjectId(postId)});
+     await db.collection('posts').deleteOne({_id:new ObjectId(postId)});
      
         const updatedPost= await db.collection('posts').findOne({_id:new ObjectId(postId)})
-         res.status(200).json(updatedPosts);
+         res.status(200).json(updatedPost);
      
   }catch(error){
     console.error('Error occured on deleting:', error);
@@ -41,7 +41,7 @@ module.exports.editPost=async(req,res)=>{
      const db=await connectToDb();
      const {postId}=req.params;
      const {title,content,completed}=req.body
-     const updatedPosts = await db.collection('posts').updateOne(
+     await db.collection('posts').updateOne(
         { _id: new ObjectId(postId) },
         {
           $set: {
