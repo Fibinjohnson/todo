@@ -6,6 +6,6 @@ const {getFeedpost,editPost,deletePost,addPost,changeStatus} =require('../contro
 router.post('/:userId',verifyToken,addPost)
 router.get('/:userId',verifyToken,getFeedpost)
 router.patch('/:postId/editpost',verifyToken,editPost)
-router.patch('/:postId/deletePost',verifyToken,deletePost)
+router.delete('/:postId/deletePost',verifyToken,deletePost)
 router.patch('/:postId/checked',verifyToken,changeStatus)
 module.exports=router;

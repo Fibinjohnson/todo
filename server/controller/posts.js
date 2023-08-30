@@ -28,7 +28,7 @@ module.exports.deletePost=async(req,res)=>{
     
      const updatedPosts=await db.collection('posts').deleteOne({_id:new ObjectId(postId)});
      
-        const updatedPost= await db.collection('posts').findOne({_id:new ObjectId(postId)}).toArray();
+        const updatedPost= await db.collection('posts').findOne({_id:new ObjectId(postId)})
          res.status(200).json(updatedPosts);
      
   }catch(error){

@@ -79,13 +79,13 @@ function TaskItem({completed,postId,title,content}) {
 }
 console.log(useSelector((state)=>state.posts),'handle delete')
 const handleDelete = async (e) => {
-
+ e.preventDefault();
   setDeleteClicked(!deleteClicked);
  
 
   try {
       const response = await fetch(`http://localhost:3001/post/${postId}/deletePost`, {
-          method: 'PATCH',
+          method: 'DELETE',
           headers: {
               "Authorization": `Bearer ${token}`
           }
