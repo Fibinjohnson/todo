@@ -14,7 +14,7 @@ const {register}=require('./controller/Auth')
 const auth=require('./routes/auth')
 const postRoutes=require('./routes/postRoutes')
 
-app.use(cors({  origin: 'https://profound-sopapillas-939c26.netlify.app/',
+app.use(cors({  origin: 'https://main--profound-sopapillas-939c26.netlify.app/',
      credentials:true}))
 app.use(cookieParser())
 app.use(express.json());
