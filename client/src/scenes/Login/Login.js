@@ -62,7 +62,7 @@ function Login() {
   }
   const handleRegister=async(e)=>{
     e.preventDefault();
-       const savedUserResponse = await fetch("http://localhost:3001/auth/register", {
+       const savedUserResponse = await fetch(`${config.apiUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 
