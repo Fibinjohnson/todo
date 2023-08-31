@@ -1,5 +1,5 @@
 const config = {
-    apiUrl: 'https://task-manager-hcw2.onrender.com//api', 
+    apiUrl: 'https://task-manager-ejue.onrender.com/api', 
 };
 
 export default config;
