@@ -6,7 +6,7 @@ async function connectToDb(){
     await client.connect();
     const database=client.db("TaskTracker");
     return database;
-    
+        
     }catch(error){
     console.log("connection,to mongodb error,:",error)
     }

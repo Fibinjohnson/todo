@@ -25,11 +25,10 @@ module.exports.deletePost=async(req,res)=>{
   try{
      const db= await connectToDb();
      const {postId}=req.params;
-    
-     await db.collection('posts').deleteOne({_id:new ObjectId(postId)});
-     
-        const updatedPost= await db.collection('posts').findOne({_id:new ObjectId(postId)})
-         res.status(200).json(updatedPost);
+    const {userId}=req.body ; 
+        const updatedPost= await db.collection('posts').deleteOne({_id:new ObjectId(postId)})
+        const newPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray()
+         res.status(200).json(newPosts);
      
   }catch(error){
     console.error('Error occured on deleting:', error);
@@ -92,10 +91,4 @@ module.exports.changeStatus=async(req,res)=>{
       res.status(500).json({ message: 'an error occured in status change.' });
     }
 }
- 
-  
-  
-  
-  
-  
   

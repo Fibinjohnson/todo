@@ -14,7 +14,7 @@ const {register}=require('./controller/Auth')
 const auth=require('./routes/auth')
 const postRoutes=require('./routes/postRoutes')
 
-app.use(cors({  origin: "*",
+app.use(cors({  origin: "http://localhost:3000",
      credentials:true}))
 app.use(cookieParser())
 app.use(express.json());

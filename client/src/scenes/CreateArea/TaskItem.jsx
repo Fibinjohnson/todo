@@ -87,8 +87,10 @@ const handleDelete = async (e) => {
       const response = await fetch(`${config.apiUrl}/post/${postId}/deletePost`, {
           method: 'DELETE',
           headers: {
-              "Authorization": `Bearer ${token}`
-          }
+              "Authorization": `Bearer ${token}`,
+              'Content-Type': 'application/json',
+          },
+          body:JSON.stringify({userId:userId})
       });
 
       if (!response.ok) {
@@ -96,7 +98,7 @@ const handleDelete = async (e) => {
       }
 
       const deletedPost = await response.json();
-      dispatch(setDelete({ post: deletedPost }));
+      dispatch(setPosts({ posts: deletedPost }));
       
   } catch (error) {
       console.error('An error occurred:', error);

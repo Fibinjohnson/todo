@@ -17,6 +17,7 @@ function CreateArea() {
     const token=useSelector((state)=>state.token)
     const [isExpand,setExpand]=useState(false);
     const feedPosts=useSelector((state)=>state.posts)
+  
     const [text,setText]=useState({
         title:"",
         content:"",
