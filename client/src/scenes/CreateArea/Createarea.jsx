@@ -23,7 +23,6 @@ function CreateArea() {
         content:"",
         completed:false
     });
-    console.log(feedPosts)
  
     function expanded(){
         setExpand(true)

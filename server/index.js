@@ -39,3 +39,4 @@ connectToDb().then(()=>{console.log("connection successfull")
    }).catch((error)=>{
     console.log('connection ERROR',error)
    })
+module.exports=app;
