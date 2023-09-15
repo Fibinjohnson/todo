@@ -10,6 +10,7 @@ import { setPosts } from "../../state";
 import { useEffect } from "react";
 import config from "../../config";
 
+
 function CreateArea() {
    const [postUpdated, setPostupdated] = useState(false);
     const user=useSelector((state)=>state.user)

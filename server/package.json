@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.4",
+    "@types/cors": "^2.8.14",
+    "@types/dotenv": "^8.2.0",
+    "@types/helmet": "^4.0.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/morgan": "^1.9.5",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -10,14 +17,15 @@
     "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.8.1",
     "morgan": "^1.10.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "npx": "^10.2.2"
   },
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "mocha --timeout 10000",
-    "dev": "node index.js",
+    "test": "mocha -r ts-node/register test/**/*.tests.ts",
+    "dev": "node --exec ts-node index.ts",
     "build": "npm i"
   },
   "keywords": [],
@@ -25,8 +33,14 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/chai": "^4.3.6",
+    "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.1",
     "chai": "^4.3.8",
     "chai-http": "^4.4.0",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.2.2"
   }
 }
