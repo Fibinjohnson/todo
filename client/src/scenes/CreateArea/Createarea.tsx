@@ -13,11 +13,12 @@ import config from "../../config";
 
 function CreateArea() {
    const [postUpdated, setPostupdated] = useState(false);
-    const user=useSelector((state)=>state.user)
+    const user=useSelector((state:any)=>state.user)
     const dispatch=useDispatch()
-    const token=useSelector((state)=>state.token)
+    const token=useSelector((state:any)=>state?.token)
     const [isExpand,setExpand]=useState(false);
-    const feedPosts=useSelector((state)=>state.posts)
+    const feedPosts=useSelector((state:any)=>state.posts)
+  
   
     const [text,setText]=useState({
         title:"",
@@ -28,7 +29,7 @@ function CreateArea() {
     function expanded(){
         setExpand(true)
     }
-    const handlePostClick = async (e) => {
+    const handlePostClick = async (e:any) => {
       e.preventDefault()
       setPostupdated(!postUpdated); 
     
@@ -70,7 +71,7 @@ function CreateArea() {
     }
   }
     
-    const handleTextChange = (event) => {
+    const handleTextChange = (event:any) => {
       const { name, value } = event.target;
       setText((prevText) => ({ ...prevText, [name]: value }));
     };
@@ -87,7 +88,6 @@ function CreateArea() {
       onChange={handleTextChange} 
       name="content"
       placeholder="Add a short description..."
-      rows="1"
       value={text.content} 
     />}
         <IconButton type="submit" >
@@ -95,7 +95,7 @@ function CreateArea() {
         </IconButton>
       </form>
       {!feedPosts.message &&
-  feedPosts.map((post) => (
+  feedPosts.map((post:any) => (
     <TaskItem completed={post.completed} postId={post._id} title={post.title} content={post.content} key={post._id} />
   ))
 }

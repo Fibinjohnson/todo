@@ -6,7 +6,7 @@ import Home from './scenes/Home'
 
 
 function App() {
-  const isAuth=Boolean(useSelector((state)=>state.token))  
+  const isAuth=Boolean(useSelector((state:any)=>state?.token))  
   return (
     <div>
         <BrowserRouter>

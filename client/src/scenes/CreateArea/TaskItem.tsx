@@ -9,16 +9,23 @@ import { useSelector ,useDispatch} from 'react-redux';
 import { setPosts,setPost ,setDelete} from "../../state";
 import CheckIcon from '@mui/icons-material/Check';
 import config from '../../config';
-function TaskItem({completed,postId,title,content}) {
-    const userId=useSelector((state)=>state.user._id)
-    const token=useSelector((state)=>state.token)
+
+interface TaskItemProperty{
+  completed:boolean,
+  postId:string,
+  title:string,
+  content:string
+}
+function TaskItem({completed,postId,title,content}:TaskItemProperty) {
+    const userId=useSelector((state:any)=>state.user._id)
+    const token=useSelector((state:any)=>state.token)
     const dispatch=useDispatch();
     const [isEditMode, setIsEditMode] = useState(false);
     const [deleteClicked,setDeleteClicked]=useState(false)
     const [isChecked,setChecked]=useState(true);
     const [heading,setTitle]=useState(title);
     const [descreption,setContent]=useState(content);
-    const taskItemStyles = {
+    const taskItemStyles:React.CSSProperties  = {
     border: '1px solid #ccc',
     padding: '10px',
     marginBottom: '10px',
@@ -28,7 +35,7 @@ function TaskItem({completed,postId,title,content}) {
     marginLeft:'378px',
     position: 'relative',
   };
-  const taskcheckedItemStyles = {
+  const taskcheckedItemStyles :React.CSSProperties = {
     border: '3px solid black ',
     padding: '10px',
     marginBottom: '10px',
@@ -37,10 +44,9 @@ function TaskItem({completed,postId,title,content}) {
     width:'518px',
     marginLeft:'378px',
     position: 'relative',
-    backgroundColor:'grey'
   };
 
-  const iconsContainerStyles = {
+  const iconsContainerStyles :React.CSSProperties = {
     position: 'absolute',
     top: '10px',
     right: '10px',
@@ -54,7 +60,7 @@ function TaskItem({completed,postId,title,content}) {
   };
 
   
-  const checkStatus = async (e) => {
+  const checkStatus = async (e:any) => {
     e.preventDefault();
     
     try {
@@ -77,8 +83,8 @@ function TaskItem({completed,postId,title,content}) {
         console.error('An error occurred:', error);
     }
 }
-console.log(useSelector((state)=>state.posts),'handle delete')
-const handleDelete = async (e) => {
+console.log(useSelector((state:any)=>state.posts),'handle delete')
+const handleDelete = async (e:any) => {
  e.preventDefault();
   setDeleteClicked(!deleteClicked);
  
@@ -189,8 +195,8 @@ useEffect(()=>{getMyPosts()},[deleteClicked])
         <textarea
           value={descreption}
           onChange={(e) => setContent(e.target.value)}
-          rows="4" // Adjust the number of rows as needed
-  cols="50" 
+          rows={4} // Adjust the number of rows as needed
+           cols={5}
         />
       ) : (
         <Typography style={{ fontStyle: 'italic' }}>{content}</Typography>

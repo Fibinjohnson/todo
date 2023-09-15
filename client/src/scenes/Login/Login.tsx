@@ -22,18 +22,18 @@ function Login() {
   const [registerName,setRegisterName]=useState('')
   const [registerEmail,setRegisterEmail]=useState('')
   const [registerPassword,setPassword]=useState('')
-  const [invalidPassword,setInvalidPassword]=useState();
-  const [registeredmsg,setRegisteredmsg]=useState(null)
+  const [invalidPassword,setInvalidPassword]=useState<string|null>('');
+  const [registeredmsg,setRegisteredmsg]=useState<string|null>(null)
   const navigate=useNavigate();
   const [justifyActive, setJustifyActive] = useState('tab1');;
   const dispatch =useDispatch();
-  const handleJustifyClick = (value) => {
+  const handleJustifyClick = (value:any) => {
     if (value === justifyActive) {
       return;
     }
     setJustifyActive(value);
   };
-  const handleLogin=async(e)=>{
+  const handleLogin=async(e:any)=>{
     e.preventDefault();
     const loginUserData = await fetch(`${config.apiUrl}/auth/login`, {
         method: "POST",
@@ -60,7 +60,7 @@ function Login() {
         }
   }
   }
-  const handleRegister=async(e)=>{
+  const handleRegister=async(e:any)=>{
     e.preventDefault();
        const savedUserResponse = await fetch(`${config.apiUrl}/auth/register`, {
         method: "POST",

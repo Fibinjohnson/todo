@@ -19,8 +19,8 @@ export const authSlice=createSlice({
         setPosts:(state,action)=>{
             state.posts=action.payload.posts;
        },
-       setPost:(state,action)=>{
-           const updatedPost=state.posts.map((post)=>{
+       setPost:(state:any,action)=>{
+           const updatedPost=state.posts.map((post:any)=>{
                if(post._id===action.payload.post._id){
                    return action.payload.post;
                }else{
@@ -30,7 +30,7 @@ export const authSlice=createSlice({
            state.posts=updatedPost;
        },
        setDelete:(state,action)=>{
-        const updatedPosts=state.posts.filter((post)=>{
+        const updatedPosts=state.posts.filter((post:any)=>{
                 return post._id !== action.payload.post._id
         })
          state.posts=updatedPosts
