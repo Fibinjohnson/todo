@@ -13,10 +13,6 @@ function App() {
         <Routes>
          <Route path="/" element={<Login/>}/>
          <Route path="/home" element={isAuth?<Home/>:<Navigate to={'/'}/>} />
-         
-        
-         
-        
         </Routes>
       </BrowserRouter>
     </div>
