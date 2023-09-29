@@ -39,7 +39,6 @@ export const deletePost=async(req:Request,res:Response)=>{
        res.status(200).json(newPosts);
     }  
   }catch(error){
-    console.error('Error occured on deleting:', error);
     res.status(500).json({ message: 'Error occured on deleting' });
   }
 }

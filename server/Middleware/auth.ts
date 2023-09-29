@@ -3,7 +3,6 @@ import { Request,Response,NextFunction } from "express";
 interface CustomRequest extends Request {
   user?: any; //
 }
-
 const  verifyToken = async (req:CustomRequest, res:Response, next:NextFunction) => {
   try {
     let token = req.header("Authorization");
