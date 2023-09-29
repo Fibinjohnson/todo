@@ -13,15 +13,13 @@ function Navbar() {
       user: User; 
     }
     const user=useSelector((state:AppState)=>state.user)
-    function formatDateTime(date:any) {
+    function formatDateTime(date:Date) {
       const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const dayOfWeek = daysOfWeek[date.getDay()];
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = String(date.getFullYear()).slice(-2);
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${day}-${month}-${year}, ${dayOfWeek}, ${hours}:${minutes}`;
+      return `${dayOfWeek} ${day}-${month}-${year}`;
     }
     
     const currentDate = new Date();
@@ -31,11 +29,7 @@ function Navbar() {
   return (
     <div className='navbar'>
 <h2>Manage Your Task</h2>
-<h4>{formattedDateTime}</h4>
-<div className='links'>
-{/* <Link to='/' >Home</Link>
-<Link to='/create' style={{color:"white",backgroundColor:'#f1356d', borderRadius:"8px"}}>New blog</Link> */}
-</div>   
+<h4>{formattedDateTime}</h4>   
 <Dropdown>
       <Dropdown.Toggle variant="dark" id="dropdown-basic">
        {user.name}
