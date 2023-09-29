@@ -12,18 +12,17 @@ export const register=async(req :Request,res:Response)=>{
                const passwordHash = await bcrypt.hash(password, salt);
         const database=await connectToDb();
         const checkExistingEmail=await database?.collection('users').findOne({email:email})
+    
         if(checkExistingEmail===null){
-            if(email!=='' && username!==''){
+          
                 await database?.collection('users').insertOne({
                         username,
                         email,
                         password:passwordHash
                     })
                     res.status(200).json({msg:'New user registered'})
-                }else{
-                    res.status(400).json({msg:'email and username cant be empty'})
                 }
-        }else{
+        else{
             res.status(400).json({msg:'Already another user registered with this email'})
         }
       
