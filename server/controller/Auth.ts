@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import {sign} from "jsonwebtoken";
 export const register=async(req :Request,res:Response)=>{
     try{   
-        const {name,
+        const {username,
                email,
                password}=req.body
                const saltRounds = 10; 
@@ -12,11 +12,10 @@ export const register=async(req :Request,res:Response)=>{
                const passwordHash = await bcrypt.hash(password, salt);
         const database=await connectToDb();
         const checkExistingEmail=await database?.collection('users').findOne({email:email})
-        console.log(checkExistingEmail,'check existing mail')
         if(checkExistingEmail===null){
-            if(email!=='' && name!==''){
+            if(email!=='' && username!==''){
                 await database?.collection('users').insertOne({
-                        name,
+                        username,
                         email,
                         password:passwordHash
                     })

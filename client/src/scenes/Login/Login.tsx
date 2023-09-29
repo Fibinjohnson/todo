@@ -23,8 +23,6 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
   const [loginEmail,setLoginMail]=useState('')
   const [loginPassword,setLoginPassWord]=useState('')
-  const [registerEmail,setRegisterEmail]=useState('')
-  const [registerPassword,setPassword]=useState('')
   const [invalidPassword,setInvalidPassword]=useState<string|null>('');
   const [registeredmsg,setRegisteredmsg]=useState<string|null>(null)
   const navigate=useNavigate();
@@ -77,6 +75,7 @@ function Login() {
     handleRegister(values,onSubmitProps)
   }
   const handleRegister=async(values:any,onSubmitProps:any)=>{
+
        const savedUserResponse = await fetch(`${config.apiUrl}/auth/register`, {
         method: "POST",
         headers: {
@@ -140,6 +139,7 @@ function Login() {
           })=>(
         <form onSubmit={handleSubmit}>
           <TextField onBlur={handleBlur} 
+          label={'Username'}
           onChange={handleChange}
           value={values.username} 
           name='username'
@@ -148,17 +148,17 @@ function Login() {
           <TextField onBlur={handleBlur} 
           onChange={handleChange}
           value={values.email} 
-          name='Email'
+          name='email'
+          label='Email'
           error={Boolean(touched.email) && Boolean(errors.email)}
-          helperText={touched.email && errors.email}    id='email' type='email'/>
+          helperText={touched.email && errors.email} id='email' type='email'/>
            <TextField onBlur={handleBlur} 
           onChange={handleChange}
           value={values.password} 
-          name='Password'
+          name='password'
+          label='password'
           error={Boolean(touched.password) && Boolean(errors.password)}
           helperText={touched.password && errors.password}    id='password' type='text'/>
-
-          
 
           <MDBBtn type='submit'  className="mb-4 w-100">Sign up</MDBBtn>
           {registeredmsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
