@@ -2,7 +2,7 @@ import { Request,Response } from "express";
 import {connectToDb} from "../connection/connection";
 import bcrypt from "bcrypt";
 import {sign} from "jsonwebtoken";
-export const register=async(req :Request,res:Response)=>{
+export const register=async(req:Request,res:Response)=>{
     try{   
         const {username,
                email,

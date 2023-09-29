@@ -144,21 +144,24 @@ function Login() {
           value={values.username} 
           name='username'
           error={Boolean(touched.username) && Boolean(errors.username)}
-          helperText={touched.username && errors.username}    id='username' type='text'/>
+          helperText={touched.username && errors.username}  
+            id='username'
+           type='text'
+           sx={{width:'100%', padding:"7px" }}/>
           <TextField onBlur={handleBlur} 
           onChange={handleChange}
           value={values.email} 
           name='email'
           label='Email'
           error={Boolean(touched.email) && Boolean(errors.email)}
-          helperText={touched.email && errors.email} id='email' type='email'/>
+          helperText={touched.email && errors.email} id='email' type='email'    sx={{width:'100%', padding:"7px"}}/>
            <TextField onBlur={handleBlur} 
           onChange={handleChange}
           value={values.password} 
           name='password'
           label='password'
           error={Boolean(touched.password) && Boolean(errors.password)}
-          helperText={touched.password && errors.password}    id='password' type='text'/>
+          helperText={touched.password && errors.password}    id='password' type='text'     sx={{width:'100%', padding:"7px"}}/>
 
           <MDBBtn type='submit'  className="mb-4 w-100">Sign up</MDBBtn>
           {registeredmsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
