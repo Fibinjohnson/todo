@@ -12,12 +12,36 @@ import config from "../../config";
 
 
 function CreateArea() {
+interface State {
+  name: string,
+  email: string,
+  _id: string
+}
+
+interface OuterState {
+  user: State
+}
+
+interface Token {
+  token: string
+}
+
+interface Feedpost {
+  posts:Array<
+  {
+    _id :string,
+  title:string,
+  content:string,
+  
+  }>
+}
+
    const [postUpdated, setPostupdated] = useState(false);
-    const user=useSelector((state:any)=>state.user)
+    const user=useSelector((state:OuterState)=>state.user)
     const dispatch=useDispatch()
-    const token=useSelector((state:any)=>state?.token)
+    const token=useSelector((state:Token)=>state?.token)
     const [isExpand,setExpand]=useState(false);
-    const feedPosts=useSelector((state:any)=>state.posts)
+    const feedPosts=useSelector((state:Feedpost)=>state.posts)
   
   
     const [text,setText]=useState({
@@ -75,7 +99,7 @@ function CreateArea() {
       const { name, value } = event.target;
       setText((prevText) => ({ ...prevText, [name]: value }));
     };
-
+   
     useEffect(() => {
         getMyPosts();
     }, [postUpdated]);
@@ -94,10 +118,16 @@ function CreateArea() {
          <AddIcon className="AddIcon"/>
         </IconButton>
       </form>
-      {!feedPosts.message &&
-  feedPosts.map((post:any) => (
-    <TaskItem completed={post.completed} postId={post._id} title={post.title} content={post.content} key={post._id} />
-  ))
+      {Array.isArray(feedPosts)?( feedPosts.map((post:any) => (
+    <TaskItem completed={post.completed}
+                postId={post._id}
+                title={post.title} 
+                content={post.content}      
+                key={post._id} />
+  ))):(
+    <div>{(feedPosts as { message: string }).message}</div>
+  )
+ 
 }
     </div>
   );

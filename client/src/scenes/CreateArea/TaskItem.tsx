@@ -16,9 +16,18 @@ interface TaskItemProperty{
   title:string,
   content:string
 }
+interface State{
+   _id:string
+}
+interface Userid {
+  user:State
+}
+interface Token {
+  token :string
+}
 function TaskItem({completed,postId,title,content}:TaskItemProperty) {
-    const userId=useSelector((state:any)=>state.user._id)
-    const token=useSelector((state:any)=>state.token)
+    const userId=useSelector((state:Userid)=>state.user._id)
+    const token=useSelector((state:Token)=>state.token)
     const dispatch=useDispatch();
     const [isEditMode, setIsEditMode] = useState(false);
     const [deleteClicked,setDeleteClicked]=useState(false)
@@ -54,7 +63,7 @@ function TaskItem({completed,postId,title,content}:TaskItemProperty) {
     alignItems: 'center',
   };
 
-  const titleStyles = {
+  const titleStyles :React.CSSProperties= {
     fontSize: '1.2rem',
     fontWeight: 'bold',
   };
@@ -83,7 +92,6 @@ function TaskItem({completed,postId,title,content}:TaskItemProperty) {
         console.error('An error occurred:', error);
     }
 }
-console.log(useSelector((state:any)=>state.posts),'handle delete')
 const handleDelete = async (e:any) => {
  e.preventDefault();
   setDeleteClicked(!deleteClicked);
@@ -111,9 +119,7 @@ const handleDelete = async (e:any) => {
   }
 };
 
-
   const getMyPosts=async ()=>{
-      
     try{
      const postResponse=await fetch(`${config.apiUrl}/post/${userId}`,{
          method:"GET",
