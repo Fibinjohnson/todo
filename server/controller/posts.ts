@@ -98,7 +98,7 @@ export const changeStatus=async(req:Request,res:Response)=>{
       
     }catch(err){
         console.error('Error status feed posts:', err);
-      res.status(500).json({ message: 'an error occured in status change.' });
+        res.status(500).json({ message: 'an error occured in status change.' });
     }
 }
   

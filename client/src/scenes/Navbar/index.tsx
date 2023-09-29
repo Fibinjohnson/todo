@@ -6,7 +6,13 @@ import { setLogout } from '../../state';
 
 function Navbar() {
     const dispatch=useDispatch()
-    const user=useSelector((state:any)=>state.user)
+    interface User{
+      name:string
+    }
+    interface AppState {
+      user: User; 
+    }
+    const user=useSelector((state:AppState)=>state.user)
     function formatDateTime(date:any) {
       const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const dayOfWeek = daysOfWeek[date.getDay()];
