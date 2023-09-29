@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { setLogin } from '../../state';
 import { useDispatch } from 'react-redux';
 import config from '../../config';
+import * as yup from 'yup'
+import {TextField} from '@mui/material'
+import { Formik } from 'formik';
 import {
   MDBContainer,
   MDBTabs,
@@ -14,19 +17,29 @@ import {
 
 }
 from 'mdb-react-ui-kit';
+
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [loginEmail,setLoginMail]=useState('')
   const [loginPassword,setLoginPassWord]=useState('')
-  const [registerName,setRegisterName]=useState('')
   const [registerEmail,setRegisterEmail]=useState('')
   const [registerPassword,setPassword]=useState('')
   const [invalidPassword,setInvalidPassword]=useState<string|null>('');
   const [registeredmsg,setRegisteredmsg]=useState<string|null>(null)
   const navigate=useNavigate();
-  const [justifyActive, setJustifyActive] = useState('tab1');;
+  const [justifyActive, setJustifyActive] = useState('tab1');
   const dispatch =useDispatch();
+  const userSchema = yup.object().shape({
+    username: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().min(8).required()
+  })
+  const initialValues={
+    username:'',
+    email:'',
+    password:''
+  }
   const handleJustifyClick = (value:any) => {
     if (value === justifyActive) {
       return;
@@ -60,22 +73,20 @@ function Login() {
         }
   }
   }
-  const handleRegister=async(e:any)=>{
-    e.preventDefault();
+  const handleClick=(values:any,onSubmitProps:any)=>{
+    handleRegister(values,onSubmitProps)
+  }
+  const handleRegister=async(values:any,onSubmitProps:any)=>{
        const savedUserResponse = await fetch(`${config.apiUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 
         },
-        body: JSON.stringify({name:registerName,
-          email:registerEmail,
-          password:registerPassword}),
+        body: JSON.stringify(values),
       });
        const savedUser=await savedUserResponse.json();
        setRegisteredmsg(savedUser.msg)
-       setRegisterEmail('');
-       setRegisterName('');
-       setPassword('')
+       onSubmitProps.resetForm();
   }
 
   return (
@@ -117,17 +128,44 @@ function Login() {
 
 
         <MDBTabsPane show={justifyActive === 'tab2'}>
-        <form onSubmit={handleRegister}>
-          <MDBInput onChange={(e)=>setRegisterName(e.target.value)} value={registerName} wrapperClass='mb-4' label='Username' id='username' type='text'/>
-          <MDBInput onChange={(e)=>setRegisterEmail(e.target.value)} value={registerEmail} wrapperClass='mb-4' label='Email' id='email' type='email'/>
-          <MDBInput onChange={(e)=>setPassword(e.target.value)} value={registerPassword} wrapperClass='mb-4' label='Password' id='password' type='password'/>
+          <Formik initialValues={initialValues} validationSchema={userSchema} onSubmit={handleClick}>{({
+             values,
+             errors,
+             touched,
+             handleSubmit,
+             handleChange,
+             handleBlur,
+             setFieldValue,
+             resetForm
+          })=>(
+        <form onSubmit={handleSubmit}>
+          <TextField onBlur={handleBlur} 
+          onChange={handleChange}
+          value={values.username} 
+          name='username'
+          error={Boolean(touched.username) && Boolean(errors.username)}
+          helperText={touched.username && errors.username}    id='username' type='text'/>
+          <TextField onBlur={handleBlur} 
+          onChange={handleChange}
+          value={values.email} 
+          name='Email'
+          error={Boolean(touched.email) && Boolean(errors.email)}
+          helperText={touched.email && errors.email}    id='email' type='email'/>
+           <TextField onBlur={handleBlur} 
+          onChange={handleChange}
+          value={values.password} 
+          name='Password'
+          error={Boolean(touched.password) && Boolean(errors.password)}
+          helperText={touched.password && errors.password}    id='password' type='text'/>
 
           
 
           <MDBBtn type='submit'  className="mb-4 w-100">Sign up</MDBBtn>
           {registeredmsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
         </form>
-
+          )
+}
+        </Formik>
         </MDBTabsPane>
 
       </MDBTabsContent>
