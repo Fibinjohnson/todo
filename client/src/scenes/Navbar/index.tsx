@@ -28,8 +28,8 @@ function Navbar() {
     
   return (
     <div className='navbar'>
-<h2>Manage Your Task</h2>
-<h4>{formattedDateTime}</h4>   
+    <h2>Manage Your Task</h2>
+    <h4>{formattedDateTime}</h4>   
 <Dropdown>
       <Dropdown.Toggle variant="dark" id="dropdown-basic">
        {user.name}

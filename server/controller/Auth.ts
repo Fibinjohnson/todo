@@ -11,12 +11,24 @@ export const register=async(req :Request,res:Response)=>{
                const salt = await bcrypt.genSalt(saltRounds);
                const passwordHash = await bcrypt.hash(password, salt);
         const database=await connectToDb();
-        const addNewUser=await database?.collection('users').insertOne({
-            name,
-            email,
-            password:passwordHash
-        })
-        res.status(200).json({addNewUser})
+        const checkExistingEmail=await database?.collection('users').findOne({email:email})
+        console.log(checkExistingEmail,'check existing mail')
+        if(checkExistingEmail===null){
+            if(email!=='' && name!==''){
+                await database?.collection('users').insertOne({
+                        name,
+                        email,
+                        password:passwordHash
+                    })
+                    res.status(200).json({msg:'New user registered'})
+                }else{
+                    res.status(400).json({msg:'email and username cant be empty'})
+                }
+        }else{
+            res.status(400).json({msg:'Already another user registered with this email'})
+        }
+      
+       
     }catch(err){
         res.status(500).json({error:err})
     }
@@ -35,12 +47,9 @@ export const login=async(req:Request,res:Response)=>{
         };
         const isMatch= await bcrypt.compare(password,user.password);
         if(!isMatch){
-            return res.status(200).json({msg:"invalid Password"}),
-            console.log('invalid password')
+            return res.status(200).json({msg:"invalid Password"})
         }else{
-            
             const secretKey = process.env.SECRETCODEJWT;
-
           if (!secretKey) {
            process.exit(1);
             }

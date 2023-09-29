@@ -72,7 +72,7 @@ function Login() {
           password:registerPassword}),
       });
        const savedUser=await savedUserResponse.json();
-       setRegisteredmsg('Account created')
+       setRegisteredmsg(savedUser.msg)
        setRegisterEmail('');
        setRegisterName('');
        setPassword('')
