@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { setLogin } from '../../state';
 import { useDispatch } from 'react-redux';
 import config from '../../config';
@@ -24,9 +25,35 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
   const [invalidPassword,setInvalidPassword]=useState<string|null>('');
   const [registeredmsg,setRegisteredmsg]=useState<string|null>(null)
+  const [showError, setShowError] = useState(false);
+  const [showMsg,setMsg]=useState(false)
   const navigate=useNavigate();
   const [justifyActive, setJustifyActive] = useState('tab1');
   const dispatch =useDispatch();
+  const displayErrorFor5Seconds = () => {
+    setShowError(true);
+    setTimeout(() => {
+      setShowError(false);
+      setInvalidPassword(null)
+    }, 2000); 
+  };
+
+  const displayMsgTimer = () => {
+    setMsg(true);
+    setTimeout(() => {
+      setMsg(false);
+      setRegisteredmsg(null)
+    }, 2000); 
+  };
+  useEffect(() => {
+    
+    if (invalidPassword) {
+      displayErrorFor5Seconds();
+    }
+    if(registeredmsg){
+      displayMsgTimer()
+    }
+  }, [invalidPassword,registeredmsg]);
   const userSignupSchema = yup.object().shape({
     username: yup.string().required('Required'),
     email: yup.string().email().required('Required'),
@@ -154,7 +181,7 @@ const handleLoginClick=(values:any,onSubmitProps:any)=>{
           helperText={touched.password && errors.password}    id='password' type='text'   
             sx={{width:'100%', padding:"7px"}}/>
     <MDBBtn type="submit" className="mb-4 w-100">Sign in</MDBBtn>
-    {invalidPassword && <p style={{ color: 'red', border:'8px' }}>{invalidPassword}</p>}
+    {showError  && <p style={{ color:'#8B0000', border:'8px' }}>{invalidPassword}</p>}
    
   </form>
   )}
@@ -216,7 +243,7 @@ const handleLoginClick=(values:any,onSubmitProps:any)=>{
             sx={{width:'100%', padding:"7px"}}/>
 
           <MDBBtn type='submit'  className="mb-4 w-100">Sign up</MDBBtn>
-          {registeredmsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
+          {showMsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
           </Box>
         </form>
           )

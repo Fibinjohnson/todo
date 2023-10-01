@@ -23,7 +23,7 @@ export const register=async(req:Request,res:Response)=>{
                     res.status(200).json({msg:'New user registered'})
                 }
         else{
-            res.status(400).json({msg:'Already another user registered with this email'})
+            res.status(400).json({msg:' Another user registered with this email'})
         }
       
        
@@ -40,12 +40,11 @@ export const login=async(req:Request,res:Response)=>{
         const user= await database?.collection("users").findOne({email:email});
        
         if(!user){
-           return  res.status(400).json({msg:"Email not found"}),
-           console.log('Email not found')
+           return  res.status(400).json({msg:"Email not found"})
         };
         const isMatch= await bcrypt.compare(password,user.password);
         if(!isMatch){
-            return res.status(200).json({msg:"invalid Password"})
+            return res.status(200).json({msg:"Invalid Password"})
         }else{
             const secretKey = process.env.SECRETCODEJWT;
           if (!secretKey) {
