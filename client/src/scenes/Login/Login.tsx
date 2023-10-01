@@ -3,7 +3,7 @@ import { setLogin } from '../../state';
 import { useDispatch } from 'react-redux';
 import config from '../../config';
 import * as yup from 'yup'
-import {TextField} from '@mui/material'
+import {Box, TextField} from '@mui/material'
 import { Formik } from 'formik';
 import {
   MDBContainer,
@@ -13,29 +13,36 @@ import {
   MDBTabsContent,
   MDBTabsPane,
   MDBBtn,
-  MDBInput,
+
 
 }
 from 'mdb-react-ui-kit';
 
 import { useNavigate } from 'react-router-dom';
 
+
 function Login() {
-  const [loginEmail,setLoginMail]=useState('')
-  const [loginPassword,setLoginPassWord]=useState('')
   const [invalidPassword,setInvalidPassword]=useState<string|null>('');
   const [registeredmsg,setRegisteredmsg]=useState<string|null>(null)
   const navigate=useNavigate();
   const [justifyActive, setJustifyActive] = useState('tab1');
   const dispatch =useDispatch();
-  const userSchema = yup.object().shape({
-    username: yup.string().required(),
-    email: yup.string().email().required(),
-    password: yup.string().min(8).required()
+  const userSignupSchema = yup.object().shape({
+    username: yup.string().required('Required'),
+    email: yup.string().email().required('Required'),
+    password: yup.string().min(8,'Password must be ateast 8 charactors').required('Required')
   })
-  const initialValues={
+  const userLoginSchema =yup.object().shape({
+    email:yup.string().email().required('required'),
+    password:yup.string().required('required')
+  })
+  const initialSignupValues={
     username:'',
     email:'',
+    password:''
+  }
+  const initialLoginValues={
+    email:"",
     password:''
   }
   const handleJustifyClick = (value:any) => {
@@ -44,15 +51,14 @@ function Login() {
     }
     setJustifyActive(value);
   };
-  const handleLogin=async(e:any)=>{
-    e.preventDefault();
+  const handleLogin=async(values:any ,onSubmitProps:any)=>{
+    
     const loginUserData = await fetch(`${config.apiUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 
         },
-        body: JSON.stringify({ email:loginEmail,
-          password:loginPassword}),
+        body: JSON.stringify(values),
       });
        const loggedInUser=await loginUserData.json();
        
@@ -70,8 +76,13 @@ function Login() {
           navigate('/home')
         }
   }
+  onSubmitProps.resetForm()
   }
-  const handleClick=(values:any,onSubmitProps:any)=>{
+const handleLoginClick=(values:any,onSubmitProps:any)=>{
+  handleLogin(values,onSubmitProps)
+}
+
+  const handleRegisterClick=(values:any,onSubmitProps:any)=>{
     handleRegister(values,onSubmitProps)
   }
   const handleRegister=async(values:any,onSubmitProps:any)=>{
@@ -106,15 +117,48 @@ function Login() {
 
       <MDBTabsContent>
       <MDBTabsPane show={justifyActive === 'tab1'}>
+        <Formik initialValues={initialLoginValues} 
+        validationSchema={userLoginSchema}
+         onSubmit={handleLoginClick}>
+          {({
+            values,
+            errors,
+            touched,
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            setFieldValue,
+            resetForm
+        })=>( 
      
-  <form  onSubmit={handleLogin}>
-    <MDBInput onChange={(e)=>setLoginMail(e.target.value)} value={loginEmail}  wrapperClass='mb-4' label='Email address' id='form1' type='email'/>
-    <MDBInput onChange={(e)=>setLoginPassWord(e.target.value)} value={loginPassword} wrapperClass='mb-4' label='Password' id='form2' type='password'/>
-    <MDBBtn type="submit" className="mb-4 w-100">Sign in</MDBBtn>
-    {invalidPassword && <p style={{ color: 'red' }}>{invalidPassword}</p>}
-
-  </form>
+  <form  onSubmit={handleSubmit}>
+    <TextField onBlur={handleBlur}
+      onChange={handleChange} 
+      name='email'
+      value={values.email}
+      error={Boolean(touched.email) && Boolean(errors.email)}
+      helperText={ touched.email  && errors.email}
+      label='Email Address'
+      id='email' 
+      type='email'
+      size='small'
+      sx={{width:'100%', padding:"7px" }}/>
   
+  <TextField onBlur={handleBlur} 
+          onChange={handleChange}
+          value={values.password} 
+          name='password'
+          label='Password'
+          error={Boolean(touched.password) && Boolean(errors.password)}
+          variant="outlined" size="small" 
+          helperText={touched.password && errors.password}    id='password' type='text'   
+            sx={{width:'100%', padding:"7px"}}/>
+    <MDBBtn type="submit" className="mb-4 w-100">Sign in</MDBBtn>
+    {invalidPassword && <p style={{ color: 'red', border:'8px' }}>{invalidPassword}</p>}
+   
+  </form>
+  )}
+    </Formik> 
   <p className="text-center">
    {/* eslint-disable-next-line */}
     Not a member?
@@ -123,11 +167,11 @@ function Login() {
       Register
     </a>
   </p>
+ 
+
 </MDBTabsPane>
-
-
         <MDBTabsPane show={justifyActive === 'tab2'}>
-          <Formik initialValues={initialValues} validationSchema={userSchema} onSubmit={handleClick}>{({
+          <Formik initialValues={initialSignupValues} validationSchema={userSignupSchema} onSubmit={handleRegisterClick}>{({
              values,
              errors,
              touched,
@@ -136,8 +180,9 @@ function Login() {
              handleBlur,
              setFieldValue,
              resetForm
-          })=>(
+          })=>(  
         <form onSubmit={handleSubmit}>
+          <Box marginBottom={'10px'}>
           <TextField onBlur={handleBlur} 
           label={'Username'}
           onChange={handleChange}
@@ -147,24 +192,32 @@ function Login() {
           helperText={touched.username && errors.username}  
             id='username'
            type='text'
+           variant="outlined" size="small" 
            sx={{width:'100%', padding:"7px" }}/>
+
           <TextField onBlur={handleBlur} 
           onChange={handleChange}
           value={values.email} 
           name='email'
           label='Email'
           error={Boolean(touched.email) && Boolean(errors.email)}
-          helperText={touched.email && errors.email} id='email' type='email'    sx={{width:'100%', padding:"7px"}}/>
+          helperText={touched.email && errors.email} id='email' type='email' 
+          variant="outlined" size="small" 
+           sx={{width:'100%', padding:"7px"}}/>
+
            <TextField onBlur={handleBlur} 
           onChange={handleChange}
           value={values.password} 
           name='password'
           label='password'
           error={Boolean(touched.password) && Boolean(errors.password)}
-          helperText={touched.password && errors.password}    id='password' type='text'     sx={{width:'100%', padding:"7px"}}/>
+          variant="outlined" size="small" 
+          helperText={touched.password && errors.password}    id='password' type='text'   
+            sx={{width:'100%', padding:"7px"}}/>
 
           <MDBBtn type='submit'  className="mb-4 w-100">Sign up</MDBBtn>
           {registeredmsg && <p style={{ color: 'blue' }}>{registeredmsg}</p>}
+          </Box>
         </form>
           )
 }
