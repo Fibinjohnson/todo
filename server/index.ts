@@ -15,7 +15,7 @@ import {register} from './controller/Auth'
 import auth from './routes/auth'
 import postRoutes from './routes/postRoutes'
 
-app.use(cors({  origin: "http://localhost:3000",
+app.use(cors({  origin: "https://66ab695fbccdbb0086337884--profound-sopapillas-939c26.netlify.app",
      credentials:true}))
 app.use(cookieParser())
 app.use(express.json());
