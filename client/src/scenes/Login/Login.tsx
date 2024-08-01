@@ -79,7 +79,7 @@ function Login() {
     setJustifyActive(value);
   };
   const handleLogin=async(values:any ,onSubmitProps:any)=>{
-    
+    console.log(config.apiUrl,"login url")
     const loginUserData = await fetch(`${config.apiUrl}/auth/login`, {
         method: "POST",
         headers: {
