@@ -15,7 +15,7 @@ import {register} from './controller/Auth'
 import auth from './routes/auth'
 import postRoutes from './routes/postRoutes'
 
-app.use(cors({  origin: "https://66ab695fbccdbb0086337884--profound-sopapillas-939c26.netlify.app",
+app.use(cors({  origin: "*",
      credentials:true}))
 app.use(cookieParser())
 app.use(express.json());
@@ -25,7 +25,10 @@ app.use(helmet.crossOriginResourcePolicy({
     policy:"cross-origin"
 }));
 app.use(BodyParser.urlencoded({limit:"30mb", extended: true }));
-
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.post('/api/auth/register',register)
 app.use('/api/auth',auth)
