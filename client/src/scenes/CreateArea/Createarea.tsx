@@ -3,12 +3,25 @@ import { useState } from "react";
 import './CreateArea.css'
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector } from "react-redux";
-import { IconButton } from "@mui/material";
 import TaskItem from "./TaskItem";
 import { useDispatch } from "react-redux";
 import { setPosts } from "../../state";
 import { useEffect } from "react";
 import config from "../../config";
+import { useLongPress } from "@uidotdev/usehooks";
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
 
 
 function CreateArea() {
@@ -42,6 +55,11 @@ interface Feedpost {
     const token=useSelector((state:Token)=>state?.token)
     const [isExpand,setExpand]=useState(false);
     const feedPosts=useSelector((state:Feedpost)=>state.posts)
+
+    const [selectedPosts, setSelectedPosts] = useState<string[]>([]);
+
+
+
   
   
     const [text,setText]=useState({
@@ -118,12 +136,21 @@ interface Feedpost {
          <AddIcon className="AddIcon"/>
         </IconButton>
       </form>
+
+
+
       {Array.isArray(feedPosts)?( feedPosts.map((post:any) => (
-    <TaskItem completed={post.completed}
+        <div 
+>
+              <TaskItem completed={post.completed}
                 postId={post._id}
                 title={post.title} 
                 content={post.content}      
-                key={post._id} />
+                key={post._id} 
+                selectedPosts={selectedPosts} 
+                setSelectedPosts={setSelectedPosts}
+               />
+        </div>
   ))):(
     <div>{(feedPosts as { message: string }).message}</div>
   )

@@ -79,7 +79,6 @@ function Login() {
     setJustifyActive(value);
   };
   const handleLogin=async(values:any ,onSubmitProps:any)=>{
-    console.log(config.apiUrl,"login url")
     const loginUserData = await fetch(`${config.apiUrl}/auth/login`, {
         method: "POST",
         headers: {
@@ -87,8 +86,7 @@ function Login() {
         },
         body: JSON.stringify(values),
       });
-       const loggedInUser=await loginUserData.json();
-       
+       const loggedInUser=await loginUserData.json();       
        if(loggedInUser.msg){
           setInvalidPassword(loggedInUser.msg)
        }else{

@@ -7,7 +7,7 @@ import { setLogout } from '../../state';
 function Navbar() {
     const dispatch=useDispatch()
     interface User{
-      name:string
+      username:string
     }
     interface AppState {
       user: User; 
@@ -28,11 +28,10 @@ function Navbar() {
     
   return (
     <div className='navbar'>
-    <h2>Manage Your Task</h2>
     <h4>{formattedDateTime}</h4>   
 <Dropdown>
       <Dropdown.Toggle variant="dark" id="dropdown-basic">
-       {user.name}
+       {user?.username}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>

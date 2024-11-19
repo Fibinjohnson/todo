@@ -3,6 +3,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+
 import EditIcon from '@mui/icons-material/Edit';
 import { useState ,useEffect} from 'react';
 import { useSelector ,useDispatch} from 'react-redux';
@@ -10,11 +12,15 @@ import { setPosts,setPost ,setDelete} from "../../state";
 import CheckIcon from '@mui/icons-material/Check';
 import config from '../../config';
 
+
 interface TaskItemProperty{
   completed:boolean,
   postId:string,
   title:string,
-  content:string
+  content:string,
+  selectedPosts:Array<string>,
+  setSelectedPosts: (value: Array<string> | ((prev: Array<string>) => Array<string>)) => void;
+
 }
 interface State{
    _id:string
@@ -25,7 +31,8 @@ interface Userid {
 interface Token {
   token :string
 }
-function TaskItem({completed,postId,title,content}:TaskItemProperty) {
+function TaskItem(props:TaskItemProperty) {
+  const {completed,postId,title,content,selectedPosts,setSelectedPosts}=props
     const userId=useSelector((state:Userid)=>state.user._id)
     const token=useSelector((state:Token)=>state.token)
     const dispatch=useDispatch();
@@ -68,6 +75,10 @@ function TaskItem({completed,postId,title,content}:TaskItemProperty) {
     fontWeight: 'bold',
   };
 
+
+
+
+
   
   const checkStatus = async (e:any) => {
     e.preventDefault();
@@ -92,20 +103,44 @@ function TaskItem({completed,postId,title,content}:TaskItemProperty) {
         console.error('An error occurred:', error);
     }
 }
+
+const isDeleteSelected=()=>{
+  if(selectedPosts.includes(postId)){
+    return true
+  }else {
+    return false
+  }
+}
+
 const handleDelete = async (e:any) => {
  e.preventDefault();
   setDeleteClicked(!deleteClicked);
+
+
  
 
   try {
-      const response = await fetch(`${config.apiUrl}/post/${postId}/deletePost`, {
+
+    setSelectedPosts((prevValue: Array<string>) => {
+      if (prevValue.includes(postId)) {
+        // Remove postId if it already exists
+        return prevValue.filter((id) => id !== postId);
+      } else {
+        // Add postId if it doesn't exist
+        return [...prevValue, postId];
+      }
+    });
+    
+      const response = await fetch(`${config.apiUrl}//deletePost`, {
           method: 'DELETE',
           headers: {
               "Authorization": `Bearer ${token}`,
               'Content-Type': 'application/json',
           },
-          body:JSON.stringify({userId:userId})
-      });
+          body:JSON.stringify({userId:userId,
+                               posts:selectedPosts
+                 })
+           });
 
       if (!response.ok) {
           throw new Error('Request failed');
@@ -132,8 +167,6 @@ const handleDelete = async (e:any) => {
      console.log("get feedPosts error",err)
  }
 }
- 
-
 
 const handleEditIconClick=async()=>{
     setIsEditMode(true);
@@ -166,12 +199,12 @@ const handleSaveIconClick = async () => {
 
 useEffect(()=>{getMyPosts()},[deleteClicked])
   return (
-    <div style={completed ?taskcheckedItemStyles:taskItemStyles}>
+    <div className='container' style={completed ?taskcheckedItemStyles:taskItemStyles}>
       <FormControlLabel
         control={<Checkbox />}
         checked={completed}
         onChange={checkStatus} 
-        label={completed?"Completed":'Mark as complete'}
+        label={completed?"Completed":'Mark as completed'}
         style={{ marginBottom: '5px' }}
       />
       
@@ -181,7 +214,12 @@ useEffect(()=>{getMyPosts()},[deleteClicked])
         ) : (
           <EditIcon style={{ marginRight: '10px' }} onClick={handleEditIconClick} />
         )}
-        <DeleteIcon onClick={handleDelete} />
+
+        {isDeleteSelected()? (<AutoDeleteIcon onClick={handleDelete}  />):<DeleteIcon onClick={handleDelete} />
+                  
+                 
+        }
+
       </div>
       
        
