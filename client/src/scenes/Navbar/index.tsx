@@ -3,6 +3,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setLogout } from '../../state';
+import {MultiselectDelete} from './MultiselectDelete';
+
 
 function Navbar() {
     const dispatch=useDispatch()
@@ -28,6 +30,8 @@ function Navbar() {
     
   return (
     <div className='navbar'>
+     <MultiselectDelete/>
+
     <h4>{formattedDateTime}</h4>   
 <Dropdown>
       <Dropdown.Toggle variant="dark" id="dropdown-basic">

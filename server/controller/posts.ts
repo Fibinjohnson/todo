@@ -26,19 +26,36 @@ export const addPost=async(req :Request,res:Response)=>{
   }
    
 }
-export const deletePost=async(req:Request,res:Response)=>{
+export const deletePosts=async(req:Request,res:Response)=>{
   try{
+    console.log("caleedddddddddddddddd")
      const db= await connectToDb();
      const {postId}=req.params;
-    const {userId}=req.body ; 
+    const {userId , posts}=req.body ; 
+
+    console.log(posts,"caleedddddddddddddddd")
+
+    console.log(posts)
     if(!db){
       console.log('posts error')
     }else{
-       await db.collection('posts').deleteOne({_id:new ObjectId(postId)})
-      const newPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray()
+
+      const collection = db.collection("posts");
+
+      //  await db.collection('posts').deleteOne({_id:new ObjectId(postId)})
+      // const newPosts= await db.collection('posts').find({user:new ObjectId(userId)}).toArray()
+
+      const objectIdsToDelete = posts.map((id:any) => new ObjectId(id));
+
+      // Delete documents with the specified IDs
+      await collection.deleteMany({ _id: { $in: objectIdsToDelete } });
+  
+      // Find remaining documents
+      const newPosts = await collection.find().toArray();
        res.status(200).json(newPosts);
     }  
   }catch(error){
+    console.log(error)
     res.status(500).json({ message: 'Error occured on deleting' });
   }
 }

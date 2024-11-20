@@ -1,6 +1,7 @@
 import express from 'express';
 import BodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import logger from 'morgan'
 dotenv.config();
 import helmet from "helmet";
 import morgan from "morgan";
@@ -18,6 +19,7 @@ import postRoutes from './routes/postRoutes'
 app.use(cors({  origin: "*",
      credentials:true}))
 app.use(cookieParser())
+app.use(logger("dev"));
 app.use(express.json());
 app.use(BodyParser.json({ limit:"30mb"}))
 app.use(morgan("common"))

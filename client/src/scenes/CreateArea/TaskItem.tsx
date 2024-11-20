@@ -8,7 +8,7 @@ import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useState ,useEffect} from 'react';
 import { useSelector ,useDispatch} from 'react-redux';
-import { setPosts,setPost ,setDelete} from "../../state";
+import { setPosts,setPost , setDeletedFlag} from "../../state";
 import CheckIcon from '@mui/icons-material/Check';
 import config from '../../config';
 
@@ -35,6 +35,7 @@ function TaskItem(props:TaskItemProperty) {
   const {completed,postId,title,content,selectedPosts,setSelectedPosts}=props
     const userId=useSelector((state:Userid)=>state.user._id)
     const token=useSelector((state:Token)=>state.token)
+    const deleteSelected=useSelector((state:any)=>state.deletedFlag)
     const dispatch=useDispatch();
     const [isEditMode, setIsEditMode] = useState(false);
     const [deleteClicked,setDeleteClicked]=useState(false)
@@ -105,7 +106,7 @@ function TaskItem(props:TaskItemProperty) {
 }
 
 const isDeleteSelected=()=>{
-  if(selectedPosts.includes(postId)){
+  if(deleteSelected.includes(postId)){
     return true
   }else {
     return false
@@ -120,39 +121,29 @@ const handleDelete = async (e:any) => {
  
 
   try {
+    let changedValue
 
-    setSelectedPosts((prevValue: Array<string>) => {
-      if (prevValue.includes(postId)) {
+ 
+      if (deleteSelected.includes(postId)) {
         // Remove postId if it already exists
-        return prevValue.filter((id) => id !== postId);
+        changedValue= deleteSelected.filter((id:any) => id !== postId);
       } else {
         // Add postId if it doesn't exist
-        return [...prevValue, postId];
+        changedValue= [...deleteSelected, postId];
       }
-    });
+
+      dispatch(setDeletedFlag({deletedFlag:changedValue}))
+
     
-      const response = await fetch(`${config.apiUrl}//deletePost`, {
-          method: 'DELETE',
-          headers: {
-              "Authorization": `Bearer ${token}`,
-              'Content-Type': 'application/json',
-          },
-          body:JSON.stringify({userId:userId,
-                               posts:selectedPosts
-                 })
-           });
-
-      if (!response.ok) {
-          throw new Error('Request failed');
-      }
-
-      const deletedPost = await response.json();
-      dispatch(setPosts({ posts: deletedPost }));
+    
       
   } catch (error) {
       console.error('An error occurred:', error);
   }
 };
+
+
+
 
   const getMyPosts=async ()=>{
     try{
@@ -198,6 +189,11 @@ const handleSaveIconClick = async () => {
 };
 
 useEffect(()=>{getMyPosts()},[deleteClicked])
+// useEffect(()=>{
+//   console.log(selectedPosts,"hhhhhhhhhhhhh")
+//   dispatch(setDeletedFlag({deletedFlag:selectedPosts}))
+
+// },[selectedPosts])
   return (
     <div className='container' style={completed ?taskcheckedItemStyles:taskItemStyles}>
       <FormControlLabel
